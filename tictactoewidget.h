@@ -8,14 +8,16 @@ class QPushButton;
 class TicTacToeWidget : public QWidget
 {
     Q_OBJECT
+    Q_ENUMS(Player)
+    Q_PROPERTY(Player currentPlayer READ currentPlayer WRITE setCurrentPlayer NOTIFY currentPlayerChanged)
 
 public:
     enum Player
     {
         Invalid, Player1, Player2, Draw
-    }
+    };
 
-    TicTacToeWidget(QWidget *parent = nullptr);
+    explicit TicTacToeWidget(QWidget *parent = nullptr);
     ~TicTacToeWidget();
 
     Player currentPlayer() const { return m_currentPlayer; }
@@ -35,7 +37,8 @@ public slots:
     void handleButtonClick(int);
 
 private:
-    setupBoard();
+    void setupBoard();
+    Player checkWinCondition(int, int);
     Player m_currentPlayer;
     QList<QPushButton*> board;
 };

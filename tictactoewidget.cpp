@@ -17,10 +17,25 @@ TicTacToeWidget::~TicTacToeWidget()
 
 void TicTacToeWidget::handleButtonClick(int index)
 {
+    if (index < 0 || index >= board.size())
+        return;
 
+    auto button = board.at(index);
+    if (button->text() != " ")
+        return;
+
+    button->setText(currentPlayer() == Player1 ? "X" : "O");
+    auto winner = checkWinCondition(index/3, index%3);
+    if (winner == Invalid)
+    {
+        setCurrentPlayer(currentPlayer() == Player1 ? Player2 : Player1);
+        return;
+    }
+    else
+        emit gameOver(winner);
 }
 
-TicTacToeWidget::setupBoard()
+void TicTacToeWidget::setupBoard()
 {
     auto gridLayout = new QGridLayout;
     auto mapper = new QSignalMapper(this);
@@ -34,9 +49,15 @@ TicTacToeWidget::setupBoard()
             gridLayout->addWidget(button, row, col);
             board.append(button);
             mapper->setMapping(button, board.count()-1);
-            connect(button, &QPushButton::clicked, mapper, &QSignalMapper::map);
+            connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
         }
     }
-    connect(mapper, &QSignalMapper::mapped, this, &TicTacToeWidget::handleButtonClick);
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(handleButtonClick(int)));
     setLayout(gridLayout);
+}
+
+TicTacToeWidget::Player TicTacToeWidget::checkWinCondition(int, int)
+{
+    return Invalid;
+    // TODO: implement
 }
