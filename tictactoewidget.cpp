@@ -35,6 +35,13 @@ void TicTacToeWidget::handleButtonClick(int index)
         emit gameOver(winner);
 }
 
+void TicTacToeWidget::initNewGame()
+{
+    for (auto button: board)
+        button->setText(" ");
+    setCurrentPlayer(Player1);
+}
+
 void TicTacToeWidget::setupBoard()
 {
     auto gridLayout = new QGridLayout;

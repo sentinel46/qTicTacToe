@@ -35,6 +35,7 @@ signals:
 
 public slots:
     void handleButtonClick(int);
+    void initNewGame();
 
 private:
     void setupBoard();
